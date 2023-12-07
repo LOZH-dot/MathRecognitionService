@@ -16,18 +16,30 @@
             <a class="navbar-brand ms-3 brand">Math Recognition Service</a>
         </div>
         <div class="container">
-            <button type="button" class="btn btn-primary ms-3">Логин</button>
+            <button type="button" class="btn btn-primary ms-3" @onclick="() => OpenLoginDialog()">Логин</button>
             <button type="button" class="btn btn-light ms-2 ">Регистрация</button>
         </div>
         <div>
-            <img src="@logoPath" class="lang-img" @onclick="ChangeLang"/>
+            <img src="@logoPath" class="lang-img"/>
         </div>
     </div>
 </nav>
 
+@if (LoginDialogOpen)
+{
+    @if (LoginDialogOpen)
+{
+    <ModalLoginWindow
+        OnClose="@OnLoginDialogClose">
+    </ModalLoginWindow>
+}
+}
+
 @code {
     private Lang currentLang = Lang.RUSSIAN;
     private string logoPath = ruLangLogo;
+
+    public bool LoginDialogOpen { get; set; }
 
     private static string ruLangLogo = "img/ru_ru_lang_logo.png";
     private static string enLangLogo = "img/en_en_lang_logo.png";
@@ -38,22 +50,16 @@
         RUSSIAN
     }
 
-    void ChangeLang()
+    private async Task OnLoginDialogClose(bool accepted)
     {
-        if (currentLang == Lang.RUSSIAN)
-            currentLang = Lang.ENGLISH;
-        else
-            currentLang = Lang.RUSSIAN;
+        LoginDialogOpen = false;
+        StateHasChanged();
+    }
 
-        switch (currentLang)
-        {
-            case Lang.ENGLISH:
-                logoPath = enLangLogo;
-                break;
-            case Lang.RUSSIAN:
-                logoPath = ruLangLogo;
-                break;
-        }
+    private void OpenLoginDialog()
+    {
+        LoginDialogOpen = true;
+        StateHasChanged();
     }
 }
 
