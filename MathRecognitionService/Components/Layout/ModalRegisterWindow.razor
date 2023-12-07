@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="modal-footer my-2" style="flex-direction:column;">
-                <p>Есть аккаунт? Войти</p>
+                <p>Есть аккаунт? <a href="" @onclick="ModalLoginCall">Войти</a></p>
             </div>
         </div>
     </div>
@@ -53,6 +53,9 @@
     [Parameter]
     public EventCallback<bool> OnClose { get; set; }
 
+    [Parameter]
+    public EventCallback<bool> OnLoginCall { get; set; }
+
     private Task ModalCancel()
     {
         return OnClose.InvokeAsync(false);
@@ -61,5 +64,10 @@
     private Task ModalOk()
     {
         return OnClose.InvokeAsync(true);
+    }
+
+    private Task ModalLoginCall()
+    {
+        return OnLoginCall.InvokeAsync(false);
     }
 }

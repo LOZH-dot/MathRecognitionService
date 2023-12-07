@@ -25,12 +25,12 @@
 @if (LoginDialogOpen)
 {
     ResetModalWindows();
-    <ModalLoginWindow OnClose="@OnLoginDialogClose" />
+    <ModalLoginWindow OnClose="@OnLoginDialogClose" OnRegisterCall="OpenRegisterDialog"/>
 }
 @if (RegisterDialogOpen)
 {
     ResetModalWindows();
-    <ModalRegisterWindow OnClose="@OnRegisterDialogClose" />
+    <ModalRegisterWindow OnClose="@OnRegisterDialogClose" OnLoginCall="OpenLoginDialog"/>
 }
 
 @code {
