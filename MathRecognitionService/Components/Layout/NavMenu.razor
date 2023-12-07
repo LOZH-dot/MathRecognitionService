@@ -16,43 +16,48 @@
             <a class="navbar-brand ms-3 brand">Math Recognition Service</a>
         </div>
         <div class="container">
-            <button type="button" class="btn btn-primary ms-3" @onclick="() => OpenLoginDialog()">Логин</button>
-            <button type="button" class="btn btn-light ms-2 ">Регистрация</button>
-        </div>
-        <div>
-            <img src="@logoPath" class="lang-img"/>
+            <button type="button" class="btn btn-primary ms-3" @onclick="() => OpenLoginDialog()">Войти</button>
+            <button type="button" class="btn btn-light ms-2" @onclick="() => OpenRegisterDialog()">Регистрация</button>
         </div>
     </div>
 </nav>
 
 @if (LoginDialogOpen)
 {
-    @if (LoginDialogOpen)
-{
-    <ModalLoginWindow
-        OnClose="@OnLoginDialogClose">
-    </ModalLoginWindow>
+    ResetModalWindows();
+    <ModalLoginWindow OnClose="@OnLoginDialogClose" />
 }
+@if (RegisterDialogOpen)
+{
+    ResetModalWindows();
+    <ModalRegisterWindow OnClose="@OnRegisterDialogClose" />
 }
 
 @code {
-    private Lang currentLang = Lang.RUSSIAN;
-    private string logoPath = ruLangLogo;
-
     public bool LoginDialogOpen { get; set; }
+    public bool RegisterDialogOpen { get; set; }
 
-    private static string ruLangLogo = "img/ru_ru_lang_logo.png";
-    private static string enLangLogo = "img/en_en_lang_logo.png";
-
-    enum Lang
+    private void ResetModalWindows()
     {
-        ENGLISH,
-        RUSSIAN
+        LoginDialogOpen = false;
+        RegisterDialogOpen = false;
     }
 
     private async Task OnLoginDialogClose(bool accepted)
     {
         LoginDialogOpen = false;
+        StateHasChanged();
+    }
+
+    private async Task OnRegisterDialogClose(bool accepted)
+    {
+        RegisterDialogOpen = false;
+        StateHasChanged();
+    }
+
+    private void OpenRegisterDialog()
+    {
+        RegisterDialogOpen = true;
         StateHasChanged();
     }
 
