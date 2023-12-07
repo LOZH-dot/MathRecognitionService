@@ -13,16 +13,38 @@
                             @*
                                 Имя пользователя/почта
                             *@
-                            <input type="text" style="width: 100%;" placeholder="Логин или почта"/>
+                            <input type="text" style="width: 100%;" placeholder="Логин или почта" @bind="loginOrEmail"/>
                         </div>
+
                     </div>
                     <div class="row-auto position-relative">
                         <div class="w-50 mx-auto py-2">
                             @*
                                 Пароль
                             *@
-                            <input type="text" style="width: 100%;" placeholder="Пароль" />
+                            <input type="text" style="width: 100%;" placeholder="Пароль" @bind="password" />
                         </div>
+
+
+                        @if (isIncorrectPassword && isIncorrectLoginOrEmail)
+                        {
+                            <div class="alert alert-danger my-2" role="alert">
+                                Поля для пароля, имени пользователя и почты не могут быть пустыми!
+                            </div>
+                        }
+                        else if (isIncorrectPassword)
+                        {
+                            <div class="alert alert-danger my-2" role="alert">
+                                Поле для пароля не может быть пустым!
+                            </div>
+                        }
+                        else if (isIncorrectLoginOrEmail)
+                        {
+                            <div class="alert alert-danger my-2" role="alert">
+                                Поле для имени пользователя или почты не может быть пустым!
+                            </div>
+                        }
+
                     </div>
                     <div class="row-auto position-relative">
                         <div class="w-50 mx-auto py-2 position-relative">
@@ -42,11 +64,19 @@
 </div>
 
 @code {
+    private string loginOrEmail = string.Empty;
+    private string password = string.Empty;
+
+    private bool isIncorrectLoginOrEmail = false;
+    private bool isIncorrectPassword = false;
+
     [Parameter]
     public EventCallback<bool> OnClose { get; set; }
 
     [Parameter]
     public EventCallback<bool> OnRegisterCall { get; set; }
+
+    private EventCallback<bool> OnIncorrectInfo { get; set; } 
 
     private Task ModalCancel()
     {
@@ -55,11 +85,37 @@
 
     private Task ModalOk()
     {
+        if (!ValidateData()) return OnIncorrectInfo.InvokeAsync(true);
+
         return OnClose.InvokeAsync(true);
     }
 
     private Task ModalRegisterCall()
     {
         return OnRegisterCall.InvokeAsync(false);
+    }
+
+    private bool ValidateData()
+    {
+        bool validateComplete = true;
+
+        ResetValidateNotifications();
+
+        if (string.IsNullOrWhiteSpace(loginOrEmail)){
+            isIncorrectLoginOrEmail = true;
+            validateComplete = false;
+        }
+        if (string.IsNullOrWhiteSpace(password)){
+            isIncorrectPassword = true;
+            validateComplete = false;
+        }
+
+        return validateComplete;
+    }
+
+    private void ResetValidateNotifications()
+    {
+        isIncorrectLoginOrEmail = false;
+        isIncorrectPassword = false;
     }
 }

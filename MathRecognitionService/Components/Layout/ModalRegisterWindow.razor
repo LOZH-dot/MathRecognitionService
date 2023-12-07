@@ -1,4 +1,5 @@
-﻿<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);"
+﻿@using System.Text.RegularExpressions
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);"
      aria-modal="true" role="dialog">
     <div class="modal-dialog py-5">
         <div class="modal-content">
@@ -13,7 +14,7 @@
                             @*
                             Имя пользователя
                             *@
-                            <input type="text" style="width: 100%;" placeholder="Логин" />
+                            <input type="text" style="width: 100%;" placeholder="Логин" @bind="login"/>
                         </div>
                     </div>
                     <div class="row-auto position-relative">
@@ -21,7 +22,7 @@
                             @*
                             Почта
                             *@
-                            <input type="text" style="width: 100%;" placeholder="Почта" />
+                            <input type="text" style="width: 100%;" placeholder="Почта" @bind="email"/>
                         </div>
                     </div>
                     <div class="row-auto position-relative">
@@ -29,8 +30,34 @@
                             @*
                             Пароль
                             *@
-                            <input type="text" style="width: 100%;" placeholder="Пароль" />
+                            <input type="text" style="width: 100%;" placeholder="Пароль" @bind="password"/>
                         </div>
+
+
+                        @if (isIncorrectLogin)
+                        {
+                        <div class="alert alert-danger my-2" role="alert">
+                            Поле для логина не может быть пустым!
+                        </div>
+                        } else if (isIncorrectEmail)
+                        {
+                            <div class="alert alert-danger my-2" role="alert">
+                                Поле для почты не может быть пустым!
+                            </div>
+                        } else if (isIncorrectEmailView)
+                        {
+                            <div class="alert alert-danger my-2" role="alert">
+                                Неверный формат ввода электронной почты!
+                            </div>
+                        }
+                        else if (isIncorrectPassword)
+                        {
+                            <div class="alert alert-danger my-2" role="alert">
+                                Поле для пароля не может быть пустым!
+                            </div>
+                        }
+
+
                     </div>
                     <div class="row-auto position-relative">
                         <div class="w-50 mx-auto py-2 position-relative">
@@ -50,11 +77,22 @@
 </div>
 
 @code {
+    private string login = string.Empty;
+    private string email = string.Empty;
+    private string password = string.Empty;
+
+    private bool isIncorrectLogin = false;
+    private bool isIncorrectEmail = false;
+    private bool isIncorrectEmailView = false;
+    private bool isIncorrectPassword = false;
+
     [Parameter]
     public EventCallback<bool> OnClose { get; set; }
 
     [Parameter]
     public EventCallback<bool> OnLoginCall { get; set; }
+
+    private EventCallback<bool> OnIncorrectInfo { get; set; }
 
     private Task ModalCancel()
     {
@@ -63,11 +101,54 @@
 
     private Task ModalOk()
     {
+        if (!ValidateData()) return OnIncorrectInfo.InvokeAsync(true);
+
         return OnClose.InvokeAsync(true);
     }
 
     private Task ModalLoginCall()
     {
         return OnLoginCall.InvokeAsync(false);
+    }
+
+
+    private bool ValidateData()
+    {
+        bool validateComplete = true;
+        Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+        Match match = regex.Match(email);
+
+        ResetValidateNotifications();
+
+        if (string.IsNullOrWhiteSpace(login))
+        {
+            isIncorrectLogin = true;
+            validateComplete = false;
+        }
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            isIncorrectPassword = true;
+            validateComplete = false;
+        }
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            isIncorrectEmail = true;
+            validateComplete = false;
+        }
+        if (!match.Success)
+        {
+            isIncorrectEmailView = true;
+            validateComplete = false;
+        }
+
+            return validateComplete;
+    }
+
+    private void ResetValidateNotifications()
+    {
+        isIncorrectLogin = false;
+        isIncorrectEmail = false;
+        isIncorrectPassword = false;
+        isIncorrectEmailView = false;
     }
 }
