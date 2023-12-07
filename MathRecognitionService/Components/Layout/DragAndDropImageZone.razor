@@ -1,54 +1,53 @@
 ﻿@using BlazorInputFile
 @rendermode InteractiveServer
 
-<div class="container h-100 py-5">
-    <div class="row h-100 justify-content-center align-items-center">
-        <div class="col-6">
-            <div class="dropzone @dropClass rounded">
-                <BlazorInputFile.InputFile id="fileInput" multiple title=""
-                           OnChange="SingleUpload"
-                           accept="image/png,image/gif,image/jpeg"
-                           @ondragenter="HandleDragEnter"
-                           @ondragleave="HandleDragLeave" />
-                <p class="text-center">Перетащите изображение сюда или выберите его на устройстве</p>
-            </div>
-            @if ((fileTypeError || fileSizeError || singleUploadError))
-            {
-                <ul class="validation-errors mb-0">
-                    @if (fileTypeError)
-                    {
-                        <li class="validation-message">Можно загружать только изображения.</li>
-                    }
-                    @if (singleUploadError)
-                    {
-                        <li class="validation-message">Можно загрузить только одно изображение за раз.</li>
-                    }
-                    @if (fileSizeError)
-                    {
-                        <li class="validation-message">Максимальный размер изображения @MaxFileSizeMB MB.</li>
-                    }
-                </ul>
-            }
-            @if (selectedFiles != null && selectedFiles.Count > 0)
-            {
-                <div class="col-12">
-                    <ul>
-                        @foreach (var file in selectedFiles)
-                        {
-                            <li>
-                                @file.Name
-                                <button class="btn btn-link text-danger p-0 pl-1" type="button"
-                                        @onclick="@(e => RemoveFile(file))">
-                                    <small class="align-text-bottom">Remove</small>
-                                </button>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            }
-        </div>
-    </div>
+<div class="dropzone @dropClass rounded">
+	<BlazorInputFile.InputFile id="fileInput" multiple title=""
+							   OnChange="SingleUpload"
+							   accept="image/png,image/gif,image/jpeg"
+							   @ondragenter="HandleDragEnter"
+							   @ondragleave="HandleDragLeave" />
+	<p class="text-center">Перетащите изображение сюда или выберите его на устройстве</p>
 </div>
+
+@if ((fileTypeError || fileSizeError || singleUploadError))
+{
+		@if (fileTypeError)
+		{
+			<div class="alert alert-danger my-2">
+                Загружен недопустимый формат файла!
+            </div>
+		}
+		@if (singleUploadError)
+		{
+            <div class="alert alert-danger my-2">
+               Пожалуйста, загрузите только один файл за раз!
+            </div>
+		}
+		@if (fileSizeError)
+		{
+            <div class="alert alert-danger my-2">
+                Максимальный размер изображения @MaxFileSizeMB MB.
+            </div>
+		}
+}
+@if (selectedFiles != null && selectedFiles.Count > 0)
+{
+	<div class="col-12">
+		<ul>
+			@foreach (var file in selectedFiles)
+			{
+				<li>
+					@file.Name
+					<button class="btn btn-link text-danger p-0 pl-1" type="button"
+							@onclick="@(e => RemoveFile(file))">
+						<small class="align-text-bottom">Remove</small>
+					</button>
+				</li>
+			}
+		</ul>
+	</div>
+}
  
 @code {
     const int MaxFileSizeMB = 5;
