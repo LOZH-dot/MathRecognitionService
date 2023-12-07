@@ -1,0 +1,67 @@
+﻿
+
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);"
+     aria-modal="true" role="dialog">
+    <div class="modal-dialog py-5">
+        <div class="modal-content">
+            <div class="modal-header position-relative">
+                <h4 class="modal-title position-absolute start-50 top-50 translate-middle my-3" style="background-color: white;">Вход</h4>
+                <button type="button" class="close position-absolute top-50 end-0 translate-middle-y mx-1 rounded" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body container">
+                <div class="col justify-content-center p-3">
+                    <div class="row-auto position-relative">
+                        <div class="w-50 mx-auto py-2">
+                            @*
+                                Логин
+                            *@
+                            <input type="text" style="width: 100%;" placeholder="Имя пользователя"/>
+                        </div>
+                    </div>
+                    <div class="row-auto position-relative">
+                        <div class="w-50 mx-auto py-2">
+                            @*
+                                Почта
+                            *@
+                            <input type="text" style="width: 100%;" placeholder="Электронная почта" />
+                        </div>
+                    </div>
+                    <div class="row-auto position-relative">
+                        <div class="w-50 mx-auto py-2">
+                            @*
+                                Пароль
+                            *@
+                            <input type="text" style="width: 100%;" placeholder="Пароль" />
+                        </div>
+                    </div>
+                    <div class="row-auto position-relative">
+                        <div class="w-50 mx-auto py-2 position-relative">
+                            @*
+                            Войти
+                            *@
+                            <button type="button" class="btn btn-primary position-absolute start-50 top-50 translate-middle-x" @onclick=@ModalOk>Войти</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer my-2" style="flex-direction:column;">
+                <p>Нет аккаунта? Зарегистрируйся</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+
+    private Task ModalOk()
+    {
+        return OnClose.InvokeAsync(true);
+    }
+}
