@@ -13,12 +13,15 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 position-relative">
     <div class="container-xxl d-flex align-items-md-center">
-        <div>
+        <div class="">
             <a class="navbar-brand ms-3 brand">@_localizer["brand"]</a>
         </div>
         <div class="container">
             <button type="button" class="btn btn-primary ms-3" @onclick="() => OpenLoginDialog()">@_localizer["signIn"]</button>
             <button type="button" class="btn btn-light ms-2" @onclick="() => OpenRegisterDialog()">@_localizer["signUp"]</button>
+        </div>
+        <div class="container">
+            <MathRecognitionService.Components.Shared.CultureSelector />
         </div>
     </div>
 </nav>

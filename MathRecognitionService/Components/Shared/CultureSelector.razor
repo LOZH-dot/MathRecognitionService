@@ -1,11 +1,11 @@
 ﻿@using System.Globalization
 @inject NavigationManager Navigation
+@inject IStringLocalizer<CultureSelector> _localizer
 @rendermode InteractiveServer
 
-<p>
+<p class="m-0">
     <label>
-        Select your locale:
-        <select @bind="Culture">
+        <select class="form-select" @bind="Culture">
             @foreach (var culture in supportedCultures)
             {
                     <option value="@culture">@culture.DisplayName</option>
