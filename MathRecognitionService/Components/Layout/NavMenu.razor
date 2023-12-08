@@ -1,9 +1,10 @@
-﻿@rendermode InteractiveServer
+﻿@inject IStringLocalizer<NavMenu> _localizer
+@rendermode InteractiveServer
 
 @*
 
     TODO:
-    - Сделать переключение языка (локализацию, минимум на англ и русский)
+    - Сделать переключение языка (локализацию, минимум на англ и русский) (x)
     - Сделать авторизацию
     - Сделать регистрацию
 
@@ -13,11 +14,11 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 position-relative">
     <div class="container-xxl d-flex align-items-md-center">
         <div>
-            <a class="navbar-brand ms-3 brand">Math Recognition Service</a>
+            <a class="navbar-brand ms-3 brand">@_localizer["brand"]</a>
         </div>
         <div class="container">
-            <button type="button" class="btn btn-primary ms-3" @onclick="() => OpenLoginDialog()">Войти</button>
-            <button type="button" class="btn btn-light ms-2" @onclick="() => OpenRegisterDialog()">Регистрация</button>
+            <button type="button" class="btn btn-primary ms-3" @onclick="() => OpenLoginDialog()">@_localizer["signIn"]</button>
+            <button type="button" class="btn btn-light ms-2" @onclick="() => OpenRegisterDialog()">@_localizer["signUp"]</button>
         </div>
     </div>
 </nav>

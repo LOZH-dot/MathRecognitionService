@@ -1,4 +1,6 @@
 ﻿@using BlazorInputFile
+@using System.Globalization;
+@inject IStringLocalizer<DragAndDropImageZone> _localizer
 @rendermode InteractiveServer
 
 <div class="dropzone @dropClass rounded">
@@ -7,7 +9,7 @@
 							   accept="image/png,image/gif,image/jpeg"
 							   @ondragenter="HandleDragEnter"
 							   @ondragleave="HandleDragLeave" />
-	<p class="text-center">Перетащите изображение сюда или выберите его на устройстве</p>
+    <p class="text-center">@_localizer["test"]</p>
 </div>
 
 @if ((fileTypeError || fileSizeError || singleUploadError))
@@ -15,19 +17,19 @@
 		@if (fileTypeError)
 		{
 			<div class="alert alert-danger my-2">
-                Загружен недопустимый формат файла!
+            @_localizer["fileTypeError"]
             </div>
 		}
 		@if (singleUploadError)
 		{
             <div class="alert alert-danger my-2">
-               Пожалуйста, загрузите только один файл за раз!
+            @_localizer["singleUploadError"]
             </div>
 		}
 		@if (fileSizeError)
 		{
             <div class="alert alert-danger my-2">
-                Максимальный размер изображения @MaxFileSizeMB MB.
+            @_localizer["fileSizeError"] @MaxFileSizeMB MB.
             </div>
 		}
 }
