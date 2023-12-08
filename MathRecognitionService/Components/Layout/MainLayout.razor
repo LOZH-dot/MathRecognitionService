@@ -1,17 +1,18 @@
 ﻿@inherits LayoutComponentBase
 
 <body>
-    <header>
-        <NavMenu />
-    </header>
+    <div class="wrapper">
+        <header>
+            <NavMenu />
+        </header>
 
-    <main>
-        @Body
-    </main>
+        <main class="content">
+            @Body
+        </main>
 
- @*    <footer class="footer row mt-auto">
-        <Footer />
-    </footer> *@
-
+        <div class="footer">
+            <Footer />
+        </div>
+    </div>
 </body>
 
