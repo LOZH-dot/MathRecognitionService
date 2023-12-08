@@ -1,9 +1,12 @@
-﻿<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);"
+﻿@inject IStringLocalizer<ModalLoginWindow> _localizer
+@rendermode InteractiveServer
+
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);"
      aria-modal="true" role="dialog">
     <div class="modal-dialog py-5">
         <div class="modal-content">
             <div class="modal-header position-relative">
-                <h4 class="modal-title position-absolute start-50 top-50 translate-middle my-3" style="background-color: white;">Вход</h4>
+                <h4 class="modal-title position-absolute start-50 top-50 translate-middle my-3" style="background-color: white;">@_localizer["signInLabel"]</h4>
                 @*
                     Крестик (закрыть окно)
                 *@
@@ -16,7 +19,7 @@
                             @*
                                 Имя пользователя/почта
                             *@
-                            <input type="text" style="width: 100%;" placeholder="Логин или почта" @bind="loginOrEmail"/>
+                            <input type="text" style="width: 100%;" placeholder="@_localizer["loginOrEmail"]" @bind="loginOrEmail" />
                         </div>
 
                     </div>
@@ -25,26 +28,26 @@
                             @*
                                 Пароль
                             *@
-                            <input type="text" style="width: 100%;" placeholder="Пароль" @bind="password" />
+                            <input type="text" style="width: 100%;" placeholder="@_localizer["password"]" @bind="password" />
                         </div>
 
 
                         @if (isIncorrectPassword && isIncorrectLoginOrEmail)
                         {
                             <div class="alert alert-danger my-2" role="alert">
-                                Поля для пароля, имени пользователя и почты не могут быть пустыми!
+                                @_localizer["allFieldsIncorrect"];
                             </div>
                         }
                         else if (isIncorrectPassword)
                         {
                             <div class="alert alert-danger my-2" role="alert">
-                                Поле для пароля не может быть пустым!
+                                @_localizer["passwordIncorrect"]
                             </div>
                         }
                         else if (isIncorrectLoginOrEmail)
                         {
                             <div class="alert alert-danger my-2" role="alert">
-                                Поле для имени пользователя или почты не может быть пустым!
+                                @_localizer["loginOrEmailIncorrect"]
                             </div>
                         }
 
@@ -54,13 +57,13 @@
                             @*
                             Войти
                             *@
-                            <button type="button" class="btn btn-primary position-absolute start-50 top-50 translate-middle-x" @onclick=@ModalOk>Войти</button>
+                            <button type="button" class="btn btn-primary position-absolute start-50 top-50 translate-middle-x" @onclick=@ModalOk>@_localizer["signInButton"]</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer my-2" style="flex-direction:column;">
-                <p>Нет аккаунта? <a href="" @onclick="ModalRegisterCall">Зарегистрируйся</a></p>
+                <p>@_localizer["dontHaveAccount"] <a href="" @onclick="ModalRegisterCall">@_localizer["signUpLabel"]</a></p>
             </div>
         </div>
     </div>

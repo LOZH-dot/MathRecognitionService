@@ -1,10 +1,12 @@
 ﻿@using System.Text.RegularExpressions
+@inject IStringLocalizer<ModalRegisterWindow> _localizer
+
 <div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);"
      aria-modal="true" role="dialog">
     <div class="modal-dialog py-5">
         <div class="modal-content">
             <div class="modal-header position-relative">
-                <h4 class="modal-title position-absolute start-50 top-50 translate-middle my-3" style="background-color: white;">Регистрация</h4>
+                <h4 class="modal-title position-absolute start-50 top-50 translate-middle my-3" style="background-color: white;">@_localizer["signUpLabel"]</h4>
                 @*
                     Крестик (закрыть окно)
                 *@
@@ -17,7 +19,7 @@
                             @*
                             Имя пользователя
                             *@
-                            <input type="text" style="width: 100%;" placeholder="Логин" @bind="login"/>
+                            <input type="text" style="width: 100%;" placeholder="@_localizer["login"]" @bind="login"/>
                         </div>
                     </div>
                     <div class="row-auto position-relative">
@@ -25,7 +27,7 @@
                             @*
                             Почта
                             *@
-                            <input type="text" style="width: 100%;" placeholder="Почта" @bind="email"/>
+                            <input type="text" style="width: 100%;" placeholder="@_localizer["email"]" @bind="email"/>
                         </div>
                     </div>
                     <div class="row-auto position-relative">
@@ -33,30 +35,30 @@
                             @*
                             Пароль
                             *@
-                            <input type="text" style="width: 100%;" placeholder="Пароль" @bind="password"/>
+                            <input type="text" style="width: 100%;" placeholder="@_localizer["password"]" @bind="password"/>
                         </div>
 
 
                         @if (isIncorrectLogin)
                         {
                         <div class="alert alert-danger my-2" role="alert">
-                            Поле для логина не может быть пустым!
+                                @_localizer["incorrectLoginError"]
                         </div>
                         } else if (isIncorrectEmail)
                         {
                             <div class="alert alert-danger my-2" role="alert">
-                                Поле для почты не может быть пустым!
+                                @_localizer["incorrectEmailError"]
                             </div>
                         } else if (isIncorrectEmailView)
                         {
                             <div class="alert alert-danger my-2" role="alert">
-                                Неверный формат ввода электронной почты!
+                                @_localizer["incorrectEmailViewError"]
                             </div>
                         }
                         else if (isIncorrectPassword)
                         {
                             <div class="alert alert-danger my-2" role="alert">
-                                Поле для пароля не может быть пустым!
+                                @_localizer["incorrectPasswordError"]
                             </div>
                         }
 
@@ -67,13 +69,13 @@
                             @*
                             Войти
                             *@
-                            <button type="button" class="btn btn-outline-secondary position-absolute start-50 top-50 translate-middle-x" @onclick=@ModalOk>Зарегистрироваться</button>
+                            <button type="button" class="btn btn-outline-secondary position-absolute start-50 top-50 translate-middle-x" @onclick=@ModalOk>@_localizer["signUpButton"]</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer my-2" style="flex-direction:column;">
-                <p>Есть аккаунт? <a href="" @onclick="ModalLoginCall">Войти</a></p>
+                <p>@_localizer["hasAccount"] <a href="" @onclick="ModalLoginCall">@_localizer["signIn"]</a></p>
             </div>
         </div>
     </div>
