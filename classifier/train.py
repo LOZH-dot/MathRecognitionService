@@ -11,11 +11,11 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 
-data_dir = pathlib.Path("F:\\training_data")
+data_dir = pathlib.Path(r"F:\training_data")
 image_count = len(list(data_dir.glob('*/*.jpg')))
 print("Количество изображений: {}".format(image_count))
 
-batch_size = 32
+batch_size = 8
 img_height = 45
 img_width = 45
 
@@ -72,7 +72,7 @@ model.compile(optimizer='adam',
 
 model.summary()
 
-epochs = 10
+epochs = 8
 history = model.fit(
   train_ds,
   validation_data=val_ds,
@@ -101,4 +101,4 @@ plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.show()
 
-model.save('F:\\training_data\\model.keras')
+model.save('F:\\training_data\\model_structure.keras')

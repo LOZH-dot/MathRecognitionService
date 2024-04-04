@@ -14,7 +14,7 @@ for filename in os.listdir(roisFolder):
     except Exception as e:
         print('Failed to delete %s. Reason: %s' % (file_path, e))
 
-segmentation("123432.png")
+segmentation("1231123.png")
 
 roisFiles = os.listdir(roisFolder)
 roisFiles.sort(key=lambda f: int(''.join(filter(str.isdigit, f))))

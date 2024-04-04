@@ -7,7 +7,7 @@ def segmentation(file_path):
 
     ret, thresh1 = cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY_INV)
 
-    rect_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
+    rect_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 10))
 
     dilation = cv2.dilate(thresh1, rect_kernel, iterations=1)
 
