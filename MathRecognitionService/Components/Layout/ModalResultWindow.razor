@@ -1,0 +1,48 @@
+﻿@using System.Text.RegularExpressions
+@using System;
+@using System.Diagnostics;
+@using System.IO;
+@using System.Threading.Tasks;
+@inject IStringLocalizer<ModalRegisterWindow> _localizer
+
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);"
+     aria-modal="true" role="dialog">
+    <div class="modal-dialog py-5">
+        <div class="modal-content">
+            <div class="modal-header position-relative">
+                <h4 class="modal-title position-absolute start-50 top-50 translate-middle my-3" style="background-color: white;">Результат</h4>
+                @*
+                Крестик (закрыть окно)
+                *@
+                <button type="button" class="close position-absolute top-50 end-0 translate-middle-y mx-1 rounded px-2 py-0" @onclick="@ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body container">
+                <div class="col justify-content-center p-3">
+                    <div class="row-auto position-relative">
+                        <div class="w-100 mx-auto py-2">
+                            @*
+                            Результат
+                            *@
+                            <input type="text" style="width: 100%;" @bind-value="@Result"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    [Parameter]
+    public string Result { get; set; }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+
+}

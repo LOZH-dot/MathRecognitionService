@@ -1,5 +1,6 @@
 ﻿@using BlazorInputFile
 @using System.Globalization;
+@using System.Diagnostics
 @inject IStringLocalizer<DragAndDropImageZone> _localizer
 @rendermode InteractiveServer
 
@@ -11,6 +12,11 @@
 							   @ondragleave="HandleDragLeave" />
     <p class="text-center">@_localizer["test"]</p>
 </div>
+
+@if (showResultWindow)
+{
+    <ModalResultWindow OnClose="@ResetResultWindow" Result="@GetResult()"></ModalResultWindow>
+}
 
 @if ((fileTypeError || fileSizeError || singleUploadError))
 {
@@ -35,7 +41,7 @@
 }
 @if (selectedFiles != null && selectedFiles.Count > 0)
 {
-	<div class="col-12">
+    <div class="col-12">
 		<ul>
 			@foreach (var file in selectedFiles)
 			{
@@ -43,11 +49,14 @@
 					@file.Name
 					<button class="btn btn-link text-danger p-0 pl-1" type="button"
 							@onclick="@(e => RemoveFile(file))">
-						<small class="align-text-bottom">Remove</small>
+						<small class="align-text-bottom">Удалить</small>
 					</button>
 				</li>
 			}
 		</ul>
+        <div>
+            <button class="btn btn-primary w-100" @onclick="ShowResultWindow">Распознать</button>
+        </div>
 	</div>
 }
  
@@ -59,6 +68,43 @@
     private bool fileTypeError = false;
     private bool singleUploadError = false;
     private List<IFileListEntry> selectedFiles = new List<IFileListEntry>();
+    private bool showResultWindow = false;
+
+    private string GetResult()
+    {
+        string progToRun = "main.py";
+        char[] splitter = { '\r' };
+
+        Process proc = new Process();
+        proc.StartInfo.FileName = "python.exe";
+        proc.StartInfo.RedirectStandardOutput = true;
+        proc.StartInfo.UseShellExecute = false;
+
+        // call hello.py to concatenate passed parameters
+        proc.StartInfo.Arguments = string.Concat(progToRun);
+        proc.Start();
+
+        StreamReader sReader = proc.StandardOutput;
+        string[] output = sReader.ReadToEnd().Split(splitter);
+
+        foreach (string s in output)
+            Console.WriteLine(s);
+
+        proc.WaitForExit();
+
+        string result = output[output.Length - 2];
+        return result;
+    }
+
+    private void ShowResultWindow()
+    {
+        showResultWindow = true;
+    }
+
+    private void ResetResultWindow()
+    {
+        showResultWindow = false;
+    }
 
     private void HandleDragEnter()
     {
@@ -80,7 +126,7 @@
         List<string> acceptedFileTypes = new List<string>() { "image/png", "image/jpeg", "image/gif" };
         if (files != null)
         {
-            if (files.Length != 1) // Нельзя загрузить больше одного файла за раз
+            if (files.Length > 1 || selectedFiles.Count > 0) // Нельзя загрузить больше одного файла за раз
             {
                 singleUploadError = true;
                 return;
